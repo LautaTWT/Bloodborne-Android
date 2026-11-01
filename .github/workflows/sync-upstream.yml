@@ -1,0 +1,22 @@
+# Mantiene este fork igual que el original (ducvd89/Bloodborne-Android).
+# Corre solo cada 6 horas; también se puede correr a mano desde la pestaña Actions.
+# Es lo mismo que tocar "Sync fork" en GitHub: trae los cambios nuevos y deja intacto
+# .github/README.md (el README de lauta).
+name: Sincronizar con el original
+
+on:
+  schedule:
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Traer los cambios de ducvd89/Bloodborne-Android
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api -X POST "repos/${{ github.repository }}/merge-upstream" -f branch=master
